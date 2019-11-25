@@ -1,0 +1,55 @@
+{% extends 'admin/admin_base.html' %}
+{% block body %}
+
+<strong><a href="{{ url_for('admin_drivers_new') }}">Create New Driver</a></strong>
+<table cellpadding="10">
+	<tr>
+		<th>Name</th>
+		<th>Username</th>
+		<th>Email</th>
+		<th>Phone</th>
+		<th>Schedule</th>
+	</tr>
+	{% for d in drivers %}
+	{% if d.active %}
+		<tr>
+			<td>{{ d.last_name + ', ' + d.first_name }}</td>
+			<td>{{ d.username }}</td>
+			<td>{{ d.email }}</td>
+			<td>{{ d.phone }}</td>
+			<td>
+				<form method="post">
+					<input type="hidden" name="did", value="{{ d.id }}"/>
+					<select name="sid" method="post">
+						<option value="None">---</option>
+						{% for s in schedules %}
+							<option value="{{ s.id }}" {{ 'selected' if s.driver_id == d.id }}>{{ s.name }}</option>
+						{% endfor %}
+					</select>
+					<input type="submit" value="Update Schedule"/>
+				</form>
+			</td>
+			<td><a href="{{ url_for('admin_driver_records', did=d.id) }}">Records</a></td>
+			<td><form method="post" id="deactivate_{{ d.id }}"><input type="hidden" name="deactivate" value="{{ d.id }}"><a href="javascript:{}" onclick="if(confirm('Are you use you want to deactivate this driver?')){document.getElementById('deactivate_{{ d.id }}').submit();}">Deactivate</a></form></td>
+			<td><a href="{{ url_for('admin_drivers_edit', did=d.id) }}">Edit</a></td>
+			<td><form method="post" id="reset_{{ d.id }}"><input type="hidden" name="resetpw" value="{{ d.id }}"><a href="javascript:{}" onclick="if(confirm('Are you use you want to reset this driver\'s password?')){document.getElementById('reset_{{ d.id }}').submit();}">Reset_PW</a></form></td>
+		</tr>
+	{% endif %}
+	{% endfor %}
+	{% for d in drivers %}
+	{% if not d.active %}
+		<tr style="color:grey">
+			<td>{{ d.last_name + ', ' + d.first_name }}</td>
+			<td>{{ d.username }}</td>
+			<td>{{ d.email }}</td>
+			<td>{{ d.phone }}</td>
+			<td></td>
+			<td><a href="{{ url_for('admin_driver_records', did=d.id) }}">Records</a></td>
+			<td><form method="post" id="reactivate_{{ d.id }}" onsubmit="return confirm('Are you use you want to reactivate this driver?')"><input type="hidden" name="reactivate" value="{{ d.id }}"><a href="javascript:{}" onclick="if(confirm('Are you use you want to reactivate this driver?')){document.getElementById('reactivate_{{ d.id }}').submit();}">Reactivate</a></form></td>
+			<td><a href="{{ url_for('admin_drivers_edit', did=d.id) }}">Edit</a></td>
+		</tr>
+	{% endif %}
+	{% endfor %}
+</table>
+
+{% endblock %}

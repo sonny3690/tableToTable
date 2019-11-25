@@ -1,0 +1,49 @@
+<htmL>
+<head>
+<title>Driver Schedules</title>
+</head>
+<body>
+{% for s in schedules %}
+{% for day in s[1] %}
+{% if day %}
+	<table style="max-width:100%; page-break-after: always; border-collapse: collapse" border="1">
+		<thead>
+			<tr>
+				<th>{{ s[0].name }} - {{ ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][day[0].day_of_week] }}
+				{% if s[0].driver %}<th>{{ s[0].driver.first_name }}, {{ s[0].driver.last_name }}</th>{% endif %}
+			</tr>
+			<tr>
+				<th style="white-space: nowrap">Time</th>
+				<th style="white-space: nowrap">Name</th>
+				<th style="white-space: nowrap">Address</th>
+				<th style="white-space: nowrap">Contact</th>
+				<th style="white-space: nowrap">Instructions</th>
+				<th style="white-space: nowrap">Prepared</th>
+				<th style="white-space: nowrap">Produce</th>
+				<th style="white-space: nowrap">Dairy</th>
+				<th style="white-space: nowrap">Raw Meat</th>
+				<th style="white-space: nowrap">Perishable</th>
+				<th style="white-space: nowrap">Dry Goods</th>
+				<th style="white-space: nowrap">Bread</th>
+				<th style="white-space: nowrap">Total lbs</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in day %}
+				<tr>
+					<td></td>
+					<td>{{ item.agency.name }}</td>
+					<td style="white-space: nowrap">{{ item.agency.address }}<br/>{{ item.agency.city }}</td>
+					<td>{{ item.agency.contact }}<br/>{{ item.agency.phone }}</td>
+					<td>{{ item.agency.notes | linebreaks }}</td>
+					<td></td><td></td><td></td><td></td>
+					<td></td><td></td><td></td><td></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endif %}
+{% endfor %}
+{% endfor %}
+</body>
+</htmL>

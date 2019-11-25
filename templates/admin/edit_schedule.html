@@ -1,0 +1,89 @@
+{% extends 'admin/admin_base.html' %}
+{% block body %}
+<form method="post">
+	<div {{ 'style="color:red"' | safe if form.name.errors }}>Schedule Name
+	{% for e in form.name.errors %}
+		<br/><em style="color:red">{{ e }}</em>
+	{% endfor %}
+	</div>
+	 {{ form.name() | safe }}<input type="submit" value="Save Schedule As"/>
+	<table id="schedule_table" style="border-collapse: collapse" border="1">
+		<tr>
+			<th>Sunday</th>
+			<th>Monday</th>
+			<th>Tuesday</th>
+			<th>Wednesday</th>
+			<th>Thursday</th>
+			<th>Friday</th>
+			<th>Saturday</th>
+		</tr>
+	</table>
+</form>
+
+<script type="text/javascript">
+
+	function swap(a, b, day)
+	{
+		var ae = document.getElementById("item_" + day + "_" + a);
+		var be = document.getElementById("item_" + day + "_" + b);
+		var tmp = ae.selectedIndex;
+		ae.selectedIndex = be.selectedIndex;
+		be.selectedIndex = tmp;
+	}
+	var agencies = {{ agencies | tojson }};
+	var values = {{ select_values | tojson }};
+	var t = document.getElementById("schedule_table");
+	for(var r = 0; r < {{ rows }}; r++)
+	{
+		var tr = t.insertRow(-1);
+		for(var d = 0; d < 7; d++)
+		{
+			var cell =  tr.insertCell(-1);
+			var select = document.createElement("select");
+			select.name = "item_" + d + "_" + r;
+			select.id = select.name;
+			select.style = "max-width:100%"
+			tr.appendChild(select);
+			var option = document.createElement("option");
+			
+			option.value = "none";
+			option.text = "-----"
+			select.appendChild(option);
+			for(var i = 0; i < agencies.length; i++)
+			{
+				option = document.createElement("option");
+				option.value = agencies[i][0];
+				option.text = agencies[i][1];
+
+				if(values[d][r] != null && agencies[i][0] == values[d][r][0])
+				{
+					option.selected = true;
+				}
+				select.appendChild(option);
+			}
+			
+			var skip_next = document.createElement("input");
+			skip_next.type = "checkbox";
+			skip_next.name = "skip_" + d + "_" + r;
+			skip_next.checked = values[d][r] != null && values[d][r][1];
+			
+			cell.appendChild(select);
+			cell.appendChild(document.createElement("br"));
+			cell.appendChild(document.createTextNode("Skip"))
+			cell.appendChild(skip_next);
+			
+			var up = document.createElement("a");
+			up.setAttribute("href", "javascript:swap(" + r + ", " + (r - 1) + "," + d + ")");
+			up.innerHTML = "UP"
+			cell.appendChild(up);
+			
+			cell.appendChild(document.createTextNode(" | "))
+			
+			var down = document.createElement("a");
+			down.setAttribute("href", "javascript:swap(" + r + ", " + (r + 1) + "," + d + ")");
+			down.innerHTML = "DOWN"
+			cell.appendChild(down);
+		}
+	}
+</script>
+{% endblock %}

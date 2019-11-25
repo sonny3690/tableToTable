@@ -1,0 +1,29 @@
+{% extends 'driver/driver_base.html' %}
+{% block body %}
+<table cellspacing="10">
+	<tr><td>Driver</td><td>{{ stop.route.driver.last_name }}, {{ stop.route.driver.first_name }} ({{ stop.route.driver.username }})</td></tr>
+	<tr><td>Date</td><td>{{ stop.route.date.strftime('%a %Y-%m-%d') }}</td></tr>
+	<tr><td>Address</td><td>{{ (stop.agency.address + '\n' + stop.agency.city) | linebreaks }}</td></tr>
+	<tr><td>Contact Name</td><td>{{ stop.agency.contact }}</td></tr>
+	<tr><td>Contact Phone</td><td>{{ stop.agency.phone }}</td></tr>
+	<tr><td>Notes</td><td>{{ stop.agency.notes | linebreaks }}</td></tr>
+</table>
+
+{% from 'form_tools.html' import full_form %}
+{% set fields = [form.time, form.cargo_temp, form.prepared,
+	form.produce, form.dairy, form.raw_meat, form.perishable, form.dry_goods, 
+	form.bread, form.notes] %}
+{% set onclickjs = 'select()' if session['user_type'] == 'driver' else '' %}
+{% set fargs = {
+	form.notes : {'rows' : 6, 'cols' : 50},
+	form.cargo_temp : {'onclick' : onclickjs},
+	form.prepared : {'onclick' : onclickjs},
+	form.produce : {'onclick' : onclickjs},
+	form.dairy : {'onclick' : onclickjs},
+	form.raw_meat : {'onclick' : onclickjs},
+	form.perishable : {'onclick' : onclickjs},
+	form.dry_goods : {'onclick' : onclickjs},
+	form.bread : {'onclick' : onclickjs}
+} %}
+{{ full_form(fields, submit_name='Save', method='post', field_args=fargs) }}
+{% endblock %}

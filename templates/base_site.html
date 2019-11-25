@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Table To Table Reporting{{ ' - ' + page_title if page_title else ''}}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body>
+<div style="width:100%; text-align:right">
+{% if 'user_id' in session %}
+	<a href="{{url_for('logout')}}">Logout</a>
+	&nbsp;|&nbsp;<a href="{{url_for('change_password')}}">Change Password</a>
+	&nbsp;|&nbsp;<a href="{{url_for('update_account')}}">Update Account</a>
+{% else %}
+	<a href="{{url_for('login')}}">Login</a>
+{% endif %}
+</div>
+<a href="{{ url_for('index') }}"><img src="/static/logo.png" alt="Table to Table"/></a>
+<h2>Route Accounting System</h2>
+<p>
+	{% if not 'user_type' in session %}
+	{% elif session['user_type'] == 'admin' %}
+		<a href="{{ url_for('admin_drivers') }}">Drivers</a>&nbsp;|&nbsp;
+		<a href="{{ url_for('admin_agencies') }}">Agencies</a>&nbsp;|&nbsp;
+		<a href="{{ url_for('admin_schedules') }}">Schedules</a>&nbsp;|&nbsp;
+		<a href="{{ url_for('admin_query_db') }}">Query Database</a>&nbsp;|&nbsp;
+		<a href="{{ url_for('admin_lbs_per_city') }}">Pounds Per City</a>&nbsp;|&nbsp;
+		<a href="{{ url_for('admin_lbs_per_agency') }}">Pounds Per Agency</a>&nbsp;|&nbsp;
+		<a href="{{ url_for('admin_backup') }}">Download Database Backup</a>
+	{% else %}
+		<a href="{{url_for('driver_route_today')}}">Today's Route</a>
+	{% endif %}
+</p>
+<hr/>
+{% if page_title %}<h2>{{ page_title }}</h2>{% endif %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+	{% for category, message in messages %}
+		<em><div {{ 'style="color:red"' | safe if category == 'error' else '' }}>{{ message | linebreaks }}</div></em><br/>
+	{% endfor %}
+{% endif %}
+{% endwith %}
+
+{% block body%}
+{% endblock %}
+</body>
+</html>

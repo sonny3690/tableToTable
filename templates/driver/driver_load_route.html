@@ -1,0 +1,12 @@
+{% extends 'driver/driver_base.html' %}
+{% block body %}
+<p><strong>
+Your route has not yet been loaded for the day.
+Click the button bellow to load your schedule.
+Once it has been loaded management can not make
+any changes for today.
+</strong></p>
+<form method="post" action="{{ url_for('driver_route_maker') }}">
+	<input type="submit" value="Load Today's Schedule"/>
+</form>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'admin/admin_base.html' %}
+{% block body %}
+{% from 'form_tools.html' import full_form %}
+{% set fields = 
+[
+	form.name
+]%}
+{{ full_form(fields, submit_name='Create', method='post') }}
+<hr/>
+{% if schedules %}
+<a href="{{ url_for('admin_print_schedules') }}" target=".new">Print All</a><br/>
+<table cellpadding="10">
+	<tr>
+		<th>Name</th>
+		<th>Assigned To</th>
+	</tr>
+{% for sch in schedules %}
+	<tr>
+		<td>{{ sch.name }}</td>
+		<td>{% if sch.driver %}{{ sch.driver.last_name }}, {{ sch.driver.first_name }}{% endif %}</td>
+		<td><a href="{{ url_for('admin_schedule_edit', sid=sch.id) }}">Edit</a></td>
+		<td><a href="?del={{ sch.id }}" onclick="return confirm('Are you sure you want to delete the schedule?')">Delete</a></td>
+	</tr>
+{% endfor %}
+{% else %}
+<h3>There are no schedules.</h3>
+{% endif %}
+</table>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'admin/admin_base.html' %}
+{% block body %}
+
+<strong><a href="{{ url_for('admin_agencies_new') }}">Create New Agency</a></strong>
+<table cellpadding="10">
+	<tr>
+		<th>Name</th>
+		<th>Address</th>
+		<th>Type</th>
+	</tr>
+	{% for a in agencies %}
+	{% if a.active %}
+		<tr>
+			<td>{{ a.name }}</td>
+			<td>{{ (a.address + '\n' + a.city) | linebreaks }}</td>
+			<td>{{ a.agency_type | capitalize }}</td>
+			<td><a href="{{ url_for('admin_agencies_edit', aid=a.id) }}">Edit</a></td>
+			<td><a href="{{ url_for('admin_agency_records', aid=a.id) }}">Records</a></td>
+			<td><a href="?deactivate={{ a.id }}">Deactivate</a></td>
+		</tr>
+	{% endif %}
+	{% endfor %}
+	{% for a in agencies %}
+	{% if not a.active %}
+		<tr style="color:grey">
+			<td>{{ a.name }}</td>
+			<td>{{ (a.address + '\n' + a.city) | linebreaks }}</td>
+			<td>{{ a.agency_type | capitalize }}</td>
+			<td><a href="{{ url_for('admin_agencies_edit', aid=a.id) }}">Edit</a></td>
+			<td><a href="{{ url_for('admin_agency_records', aid=a.id) }}">Records</a></td>
+			<td><a href="?reactivate={{ a.id }}">Reactivate</a></td>
+		</tr>
+	{% endif %}
+	{% endfor %}
+</table>
+
+{% endblock %}

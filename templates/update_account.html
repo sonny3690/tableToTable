@@ -1,0 +1,13 @@
+{% extends 'base_site.html' %}
+{% block body %}
+{% from 'form_tools.html' import full_form %}
+{% set fields = 
+[
+	form.username, 
+	form.first_name, 
+	form.last_name,
+	form.email, 
+	form.phone
+]%}
+{{ full_form(fields=fields, method='post', submit_name='Save Changes') }}
+{% endblock %}

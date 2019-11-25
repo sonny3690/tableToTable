@@ -1,0 +1,58 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block body %}
+
+<form>
+	Enter the year to display <input type="text" name="year" value="{{ year }}" /><br/>
+	Aggregate by chain name <input type="checkbox" name="aggregate" {{ 'checked' if 'aggregate' in request.args }}/><br/>
+	
+	<input type="submit" value="Fetch Year"/>
+</form>
+<hr/>
+<table>
+<tr>{% for type in agencies %}<th>{{ type }}</th>{% endfor %}</tr>
+<tr>
+{% for type in agencies %}
+	<td valign="top">
+	<table style="border-collapse: collapse" border="1">
+		<tr>
+			<th></th>
+			<th>January</th>
+			<th>February</th>
+			<th>March</th>
+			<th>April</th>
+			<th>May</th>
+			<th>June</th>
+			<th>July</th>
+			<th>August</th>
+			<th>September</th>
+			<th>October</th>
+			<th>November</th>
+			<th>December</th>
+		</tr>
+		{% for agency in agencies[type] %}
+			<tr><th colspan="100%" align="left">{{ agency[0] }}</th></tr>
+			{% for category in agency[1] %}
+				{% if category != 'TOTAL' %}
+					<tr>
+						<td>{{ category }}</td>
+						{% for month in agency[1][category] %}
+							<td>{{ month | commas }}</td>
+						{% endfor %}
+					</tr>
+				{% endif %}
+			{% endfor %}
+			<tr>
+				<td>TOTAL</td>
+				{% for month in agency[1]['TOTAL'] %}
+					<td>{{ month | commas }}</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+		</td>
+	</table>
+	</td>
+{% endfor %}
+</tr>
+</table>
+{% endblock %}

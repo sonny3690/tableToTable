@@ -1,0 +1,46 @@
+{% extends 'admin/admin_base.html' %}
+{% block body %}
+<form method>
+	Enter a month and year (yyyy-mm) <input type="text" name="date" value="{{ date.strftime('%Y-%m') }}"/>
+	<br/><input type="submit" value="Fetch Records"/>
+</form>
+<hr/>
+{% if records %}
+<table style="border-collapse: collapse" border="1">
+<tr>
+	<th>Date</th>
+	<th>Driver</th>
+	<th>Stop Time</th>
+	<th>Cargo Temp</th>
+	<th>Prepared</th>
+	<th>Produce</th>
+	<th>Dairy</th>
+	<th>Raw Meat</th>
+	<th>Perishable</th>
+	<th>Dry Goods</th>
+	<th>Bread</th>
+	<th>TOTAL</th>
+</tr>
+
+{% for stop in records %}
+	<tr {{ 'style="background-color:#EEEEFF"' | safe if stop.special_stop }}>
+		<td style="white-space:nowrap">{{ stop.route.date.strftime('%a %Y-%m-%d') }}</td>
+		<td>{{ stop.route.driver.last_name }}, {{ stop.route.driver.first_name }} ({{ stop.route.driver.username }})</td>
+		<td>{{ stop.time }}</td>
+		<td>{{ stop.cargo_temp | round(1) | greyzero }}</td>
+		<td>{{ stop.prepared | round(1) | greyzero }}</td>
+		<td>{{ stop.produce | round(1) | greyzero }}</td>
+		<td>{{ stop.dairy | round(1) | greyzero }}</td>
+		<td>{{ stop.raw_meat | round(1) | greyzero }}</td>
+		<td>{{ stop.perishable | round(1) | greyzero }}</td>
+		<td>{{ stop.dry_goods | round(1) | greyzero }}</td>
+		<td>{{ stop.bread | round(1) | greyzero }}</td>
+		<td>{{ stop.total_up() | round(1) | greyzero }}</td>
+		<td><a href="{{ url_for('driver_stop', sid=stop.id) }}">Edit</a></td>
+	</tr>
+{% endfor %}
+{% else %}
+<h3>No records for this month.</h3>
+{% endif %}
+</table>
+{% endblock %}

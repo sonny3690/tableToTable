@@ -1,0 +1,102 @@
+{% extends 'admin/admin_base.html' %}
+{% block body %}
+<form>
+	Enter a month and year (yyyy-mm) <input type="text" name="date" value="{{ date.strftime('%Y-%m') }}"/>
+	<br/><input type="submit" value="Fetch Records"/>
+</form>
+<hr/>
+<table width="100%">
+<tr>
+	<td valign="top" style="white-space: nowrap">
+	{% for record in records %}
+		<a href="?display={{ record.id }}&date={{ date.strftime('%Y-%m') }}">{{ record.date.strftime('%a %Y-%m-%d') }}</a><br/>
+	{% endfor %}
+	<br/><br/>
+	<form method="post" onsubmit="return confirm('WARNING: Once you add a record it can not be removed!\nDo you want to continue?')")>
+		Add Day to Records<br/>
+		<select name="add_day">
+			<option value="None">---</option>
+			{% for d in unused_days %}
+				<option value="{{ d.strftime('%Y-%m-%d') }}">{{ d.strftime('%a %Y-%m-%d') }}</option>
+			{% endfor %}
+		</select><br/>
+		<input type="submit" value="Add Record"/>
+	</form>
+	</td>
+	<td>
+	{% if display_record %}
+	<h3>{{ display_record.date.strftime('%Y-%m-%d (%A)') }}</h3>
+	<table style="border-collapse: collapse" border="1">
+	<tr>
+		<th>Agency</th>
+		<th>Stop Type</th>
+		<th>Stop Time</th>
+		<th>Cargo Temp</th>
+		<th>Prepared</th>
+		<th>Produce</th>
+		<th>Dairy</th>
+		<th>Raw Meat</th>
+		<th>Perishable</th>
+		<th>Dry Goods</th>
+		<th>Bread</th>
+		<th>TOTAL</th>
+	</tr>
+	{% for stop in display_record.stops %}
+		<tr {{ 'style="background-color:#EEEEFF"' | safe if stop.special_stop }}>
+			<td>{{ stop.agency.name }}</td>
+			<td>{{ 'PICK UP' if stop.agency.agency_type == 'donor' else 'DROP OFF' }}</td>
+			<td>{{ stop.time }}</td>
+			<td>{{ stop.cargo_temp | greyzero }}</td>
+			<td>{{ stop.prepared | greyzero }}</td>
+			<td>{{ stop.produce | greyzero }}</td>
+			<td>{{ stop.dairy | greyzero }}</td>
+			<td>{{ stop.raw_meat | greyzero }}</td>
+			<td>{{ stop.perishable | greyzero }}</td>
+			<td>{{ stop.dry_goods | greyzero }}</td>
+			<td>{{ stop.bread | greyzero }}</td>
+			<td>{{ stop.total_up() | greyzero }}</td>
+			<td><a href="{{ url_for('driver_stop', sid=stop.id) }}">Edit</a>&nbsp;&nbsp;</td>
+			<td>
+				<form id="delete_{{ stop.id }}" method="post">
+					<input type="hidden" name="delete_stop" value="{{ stop.id }}"/>
+					<a href="javascript:{}" onclick="if(confirm('Do you really want to delete this stop?')){document.getElementById('delete_{{ stop.id }}').submit();} return false;">Delete</a>
+				</form>
+			</td>
+		</tr>
+	{% endfor %}
+	{% set totals = display_record.totals() %}
+	</table>
+	<form method="post">
+		<select name="add_stop">
+			<option value="None">---</option>
+			{% for a in agencies %}
+				<option value="{{ a.id }}">{{ a.name }}</option>
+			{% endfor %}
+		</select>
+		<input type="submit" value="Add Stop"/>
+	</form>
+	<table cellpadding="10">
+		<h3>Totals</h3>
+		<tr>
+			<th>Category</th>
+			<th>Picked Up</th>
+			<th>Dropped Off</th>
+		</tr>
+		{% for t in totals[1] %}
+			<tr>
+				<td>{{ t }}</td>
+				<td>{{ totals[1][t][0] }}</td>
+				<td>{{ totals[1][t][1] }}</td>
+			</tr>
+		{% endfor %}
+		<tr>
+			<td>TOTAL</td>
+			<td>{{ totals[0][0] }}</td>
+			<td>{{ totals[0][1] }}</td>
+		</tr>
+	</table>
+		{% endif %}
+		</td>
+	</tr>
+	</table>
+{% endblock %}

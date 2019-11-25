@@ -1,0 +1,6 @@
+{% extends 'admin/admin_base.html' %}
+{% block body %}
+{% from 'form_tools.html' import full_form %}
+{% set fields = [form.name, form.address, form.city, form.agency_type, form.contact, form.phone, form.notes] %}
+{{ full_form(fields, submit_name='Save', method='post', field_args={form.notes : {'rows' : 6, 'cols' : 50}}) }}
+{% endblock %}

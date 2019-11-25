@@ -1,0 +1,6 @@
+{%extends 'base_site.html'%}
+{% block body %}
+{% from 'form_tools.html' import full_form %}
+{{ full_form([form.username, form.password], method='post', has_errors=form.errors, top_errors=False) }}
+{{ error | default('', True) }}
+{% endblock %}

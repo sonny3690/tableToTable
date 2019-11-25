@@ -1,0 +1,36 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block body %}
+
+<form>
+	Enter the year to display <input type="text" name="year" value="{{ year }}" />
+	<input type="submit" value="Fetch Year"/>
+</form>
+<hr/>
+<strong><div style="color:blue">Picked Up</div><div style="color:red">Dropped Off</div></strong>
+<table style="border-collapse: collapse" border="1">
+	<tr>
+		<th>City</th>
+		<th>January</th>
+		<th>February</th>
+		<th>March</th>
+		<th>April</th>
+		<th>May</th>
+		<th>June</th>
+		<th>July</th>
+		<th>August</th>
+		<th>September</th>
+		<th>October</th>
+		<th>November</th>
+		<th>December</th>
+	</tr>
+	{% for record in cities %}
+	<tr>
+		<td>{{ record[0] }}</td>
+		{% for item in record[1] %}
+			<td><div style="color:blue">{{ item[0] | commas }}</div><div style="color:red">{{ item[1] | commas }}</div></td>
+		{% endfor %}
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}
