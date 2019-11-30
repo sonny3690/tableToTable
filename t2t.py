@@ -19,14 +19,19 @@ import locale
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///t2t.db?check_same_thread=False'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/t2t'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/t2t'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/t2t'
 DB_PASSWORD = 'sNT0A=idLbgk2'
 DB_NAME = 't2t_routes'
 DB_USER = 't2t_routes'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://%s:%s@localhost/%s' % (DB_USER, DB_PASSWORD, DB_NAME)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://%s:%s@localhost/%s' % (DB_USER, DB_PASSWORD, DB_NAME)
 app.secret_key = '9003626490'
+
 model.db.init_app(app)
+model.db.app = app
+model.db.create_all()
+
+model.fill_with_test()
 
 locale.setlocale(locale.LC_ALL, '')
 
@@ -636,8 +641,7 @@ def admin_query_db():
         query = model.DriverStop.query.join(model.DriverDailyRoute, model.Agency).join(model.User)
         
         if 'date_filter_start' in request.form:
-            start = datetime.datetime.strptime(request.form['start_date'], '%Y-%m-%d')
-            start -= datetime.timedelta(days=1)
+            start = datetime.datetime.strptime(request.form['start_date'], '%Y-%m-%d') -  datetime.timedelta(days=1)
             query = query.filter(model.DriverDailyRoute.date >= start)
         
         if 'date_filter_end' in request.form:

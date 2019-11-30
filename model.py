@@ -177,7 +177,7 @@ def fill_with_test():
         db.session.add(u)
     db.session.commit()
     
-    cities = ('Ridgewood', 'Fair Lawn', 'Newark', 'Paramus', 'Patterson', 'Mahwah', 'Midland Park')
+    cities = ('Ridgewood', 'Fair Lawn', 'Newark', 'Paramus', 'Paterson', 'Mahwah', 'Midland Park')
     words = ['and', 'for', 'drop', 'off', 'food', 'stuff', 'back', 'front', 'door']
     def rand_sentense():
         s = ''
@@ -223,7 +223,7 @@ def fill_with_test():
             r.date = cur
             db.session.add(r)
             
-            t = datetime.datetime(2015, 1, 1, hour=6)
+            t = datetime.datetime(2019, 11, 25, hour=6)
             
             for i in range(random.randint(20, 40)):
                 s = DriverStop()
@@ -250,3 +250,4 @@ def fill_with_test():
                 
         db.session.commit()
         cur += datetime.timedelta(days=1)
+

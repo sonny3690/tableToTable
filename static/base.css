@@ -1,0 +1,14 @@
+body{
+  margin-left: 30px;  
+}
+
+.center-text {
+  text-align: 'center';
+  color: red;
+  background-color: green;
+}
+
+.center-parent {
+  align-items: center;
+}
+
