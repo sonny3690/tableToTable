@@ -81,6 +81,8 @@ class AgencyForm(Form):
     agency_type = SelectField('Agency Type', [DataRequired()], choices=[(model.Agency.DONOR, 'Donor'), 
                                                              (model.Agency.RECIPIENT, 'Recipient')])
     city = TextField('City', [DataRequired(), Regexp(NAME_REGEX), Length(min=2, max=50)])
+    state = TextField('State (ie. NJ)', [DataRequired(), Regexp(NAME_REGEX), Length(min=2, max=2)])
+    zip = TextField('Zip', [DataRequired(), Regexp(NAME_REGEX), Length(min=2, max=5)])
     contact = TextField('Contact Name', [Regexp(NAME_REGEX), Length(min=0, max=200)])
     phone = TextField('Contact Phone', [Length(max=20), Regexp(r'^[\s0-9()-]*')])
     notes = TextAreaField('Notes', [Length(min=0, max=500)])
@@ -93,6 +95,8 @@ class AgencyForm(Form):
         self.contact.data = agency.contact
         self.city.data = agency.city
         self.notes.data = agency.notes
+        self.zip.data = agency.zip
+        self.state.data = agency.state
         
         
     def load_agency(self, agency):
@@ -103,6 +107,9 @@ class AgencyForm(Form):
         agency.contact = self.contact.data.strip()
         agency.phone = self.phone.data.strip()
         agency.notes = self.notes.data.strip()
+        agency.zip = self.zip.data.strip()
+        agency.state = self.state.data.strip()
+        
         
     def make_agency(self):
         a = model.Agency()

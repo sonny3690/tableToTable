@@ -60,10 +60,13 @@ class Agency(db.Model):
     agency_type = db.Column('type', db.Enum(DONOR, RECIPIENT, name='agency_type_enum'), nullable=False)
     address = db.Column('address', db.String(200))
     city = db.Column('city', db.String(50))
+    state = db.Column('state', db.String(4))
+    zip = db.Column('zip', db.Integer)
     contact = db.Column('contact', db.String(200))
     phone = db.Column('phone', db.String(200))
     notes = db.Column('notes', db.String(500))
     active = db.Column('active', db.Boolean, default=True, nullable=False)
+    
     
 class DriverSchedule(db.Model):
     __tablename__ = 'driver_schedule'

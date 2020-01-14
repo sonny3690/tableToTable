@@ -1,8 +1,0 @@
-import os, sys
-
-os.chdir('/var/www/T2T_Flask')
-sys.path.insert(0, '/var/www/T2T_Flask')
-sys.stdout = sys.stderr
-
-from t2t import app as application
-

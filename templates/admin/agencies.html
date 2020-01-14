@@ -5,15 +5,21 @@
 <table cellpadding="10">
 	<tr>
 		<th>Name</th>
-		<th>Address</th>
+    <th>Address</th>
+    <th>City</th>
+    <th>State</th>
+    <th>Zip</th>
 		<th>Type</th>
 	</tr>
 	{% for a in agencies %}
 	{% if a.active %}
 		<tr>
-			<td>{{ a.name }}</td>
-			<td>{{ (a.address + '\n' + a.city) | linebreaks }}</td>
-			<td>{{ a.agency_type | capitalize }}</td>
+      <td align="center">{{ a.name }}</td>
+      <td align="center">{{ a.address }}</td>
+      <td align="center">{{ a.city }}</td>
+      <td align="center">{{ a.state }}</td>
+			<td align="center">{{ a.zip if (a.zip < 1000) else (0 ~a.zip)  }}</td>
+			<td align="center">{{ a.agency_type | capitalize }}</td>
 			<td><a href="{{ url_for('admin_agencies_edit', aid=a.id) }}">Edit</a></td>
 			<td><a href="{{ url_for('admin_agency_records', aid=a.id) }}">Records</a></td>
 			<td><a href="?deactivate={{ a.id }}">Deactivate</a></td>

@@ -18,9 +18,9 @@ import subprocess
 import locale
 
 app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///t2t.db?check_same_thread=False'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/t2t'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/t2t'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///t2t.db?check_same_thread=False'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/t2t'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/t2t'
 DB_PASSWORD = 'sNT0A=idLbgk2'
 DB_NAME = 't2t_routes'
 DB_USER = 't2t_routes'
@@ -31,7 +31,7 @@ model.db.init_app(app)
 model.db.app = app
 model.db.create_all()
 
-model.fill_with_test()
+# model.fill_with_test()
 
 locale.setlocale(locale.LC_ALL, '')
 
@@ -385,7 +385,7 @@ def admin_schedule_edit(sid):
                 day = int(field[1])
                 pos = int(field[2])
                 assert day >= 0 and day < 7 and pos >= 0 and pos <= 50
-                a_id = int(v);
+                a_id = int(v)
                 itm = model.DriverScheduleItem()
                 itm.day_of_week = day
                 itm.position_in_day = pos
@@ -662,7 +662,7 @@ def admin_query_db():
             
         
         header = ['Username', 'Last Name', 'First Name', 'Agency Name', 
-                  'Agency Type', 'City', 'Date', 'Time', 'Is Special Stop', 'Cargo Temperature',
+                  'Agency Type', 'City', 'State', 'Zip', 'Date', 'Time', 'Is Special Stop', 'Cargo Temperature',
                   'Prepared', 'Produce', 'Dairy', 'Raw Meat', 'Perishable', 'Dry Goods',
                   'Bread', 'Total']
         
@@ -673,7 +673,7 @@ def admin_query_db():
             #for q in query.yield_per(100):
             for q in query:
                 yield csv_line([q.route.driver.username, q.route.driver.last_name, q.route.driver.first_name,
-                         q.agency.name, q.agency.agency_type, q.agency.city, q.route.date, 
+                         q.agency.name, q.agency.agency_type, q.agency.city, q.agency.address, q.agency.state, q.agency.zip, q.route.date, 
                          q.time, q.special_stop, q.cargo_temp, q.prepared, q.produce,
                          q.dairy, q.raw_meat, q.perishable, q.dry_goods, q.bread, q.total_up()]) + '\n'
         
