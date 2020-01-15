@@ -61,7 +61,7 @@ class Agency(db.Model):
     address = db.Column('address', db.String(200))
     city = db.Column('city', db.String(50))
     state = db.Column('state', db.String(4))
-    zip = db.Column('zip', db.Integer)
+    zip = db.Column('zip', db.String(7))
     contact = db.Column('contact', db.String(200))
     phone = db.Column('phone', db.String(200))
     notes = db.Column('notes', db.String(500))

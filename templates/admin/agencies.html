@@ -18,7 +18,7 @@
       <td align="center">{{ a.address }}</td>
       <td align="center">{{ a.city }}</td>
       <td align="center">{{ a.state }}</td>
-			<td align="center">{{ a.zip if (a.zip < 1000) else (0 ~a.zip)  }}</td>
+			<td align="center">{{ a.zip }}</td>
 			<td align="center">{{ a.agency_type | capitalize }}</td>
 			<td><a href="{{ url_for('admin_agencies_edit', aid=a.id) }}">Edit</a></td>
 			<td><a href="{{ url_for('admin_agency_records', aid=a.id) }}">Records</a></td>

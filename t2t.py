@@ -662,20 +662,21 @@ def admin_query_db():
             
         
         header = ['Username', 'Last Name', 'First Name', 'Agency Name', 
-                  'Agency Type', 'City', 'State', 'Zip', 'Date', 'Time', 'Is Special Stop', 'Cargo Temperature',
+                  'Agency Type', 'Address', 'City', 'State', 'Zip', 'Date', 'Time', 'Is Special Stop', 'Cargo Temperature',
                   'Prepared', 'Produce', 'Dairy', 'Raw Meat', 'Perishable', 'Dry Goods',
-                  'Bread', 'Total']
+                  'Bread', 'Total', 'Notes']
         
         def csv_line(items):
-            return ''.join(['"' + str(s).replace('"', '""') + '",' for s in items][:-1])
+            return ''.join(['"' + str(s).replace('"', '""') + '",' for s in items])
         def gen_csv():
             yield csv_line(header) + '\n'
-            #for q in query.yield_per(100):
             for q in query:
+                total = q.prepared + q.produce + q.dairy + q.raw_meat + q.perishable + q.dry_goods + q.bread
+
                 yield csv_line([q.route.driver.username, q.route.driver.last_name, q.route.driver.first_name,
-                         q.agency.name, q.agency.agency_type, q.agency.city, q.agency.address, q.agency.state, q.agency.zip, q.route.date, 
+                         q.agency.name, q.agency.agency_type, q.agency.address, q.agency.city, q.agency.state, q.agency.zip, q.route.date, 
                          q.time, q.special_stop, q.cargo_temp, q.prepared, q.produce,
-                         q.dairy, q.raw_meat, q.perishable, q.dry_goods, q.bread, q.total_up()]) + '\n'
+                         q.dairy, q.raw_meat, q.perishable, q.dry_goods, q.bread, total, q.notes]) + '\n'
         
         return Response(gen_csv(), mimetype='text/csv', headers={'Content-Disposition': 'filename="t2t_query.csv"'})
     
