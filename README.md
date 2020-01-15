@@ -4,7 +4,7 @@
 
 - [x] Change query headers for load csv
 - [x] Zip Code Issue (Make them a String)
-- [ ] Edit/New Agencies
+- [x] Edit/New Agencies
 - [ ] Sort drop down on `http://0.0.0.0:5000/admin/driverrecords/4?display=5825&date=2020-01`
 
 ### Wishlist
