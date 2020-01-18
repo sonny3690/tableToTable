@@ -46,8 +46,8 @@ Make sure you have a MySQL instance running
 - [ ] Drag & Drop for `http://0.0.0.0:5000/admin/editschedule/1`
 - [x] `http://0.0.0.0:5000/admin/drivers/` Update Schedule Functionality for drivers account.
 - [x] `Notes` field in the CSV. 
-- [ ] Database query by Day of Week (ie. Mon)
+- [x] Database query by Day of Week (ie. Mon)
 - [ ] Possibly display dashboard (extraneous)
-- [ ] 3 Accounts for Admin
+- [x] 3 Accounts for Admin
 
 
