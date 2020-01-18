@@ -43,6 +43,15 @@
 					{% endfor %} 
 				</select>
 			</td>
+    </tr>
+    <tr>
+			<td>Day Of Week</td>
+      <td></td>
+      <td>
+        {% for d in dow %}
+          {{ d[0].upper() ~ d[1:] }} <input type="checkbox" name="{{ d }}" checked/>&nbsp;&nbsp;
+        {% endfor %} 
+			</td>
 		</tr>
 		<tr>
 			<td><input type="submit" value="Load CSV Query"/></td>

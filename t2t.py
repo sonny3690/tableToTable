@@ -4,6 +4,7 @@ import model
 import forms
 from functools import wraps
 from flask.helpers import flash
+import sqlalchemy
 from sqlalchemy.sql.functions import func, sum
 import re
 from jinja2 import Markup, evalcontextfilter, escape
@@ -637,6 +638,8 @@ def admin_agency_records(aid):
 @app.route('/admin/querydb', methods=['GET', 'POST'])
 @admin_filter
 def admin_query_db():
+    dow = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+
     if request.method == 'POST':
         query = model.DriverStop.query.join(model.DriverDailyRoute, model.Agency).join(model.User)
         
@@ -659,8 +662,12 @@ def admin_query_db():
             
         if 'driver_filter' in request.form:
             query = query.filter(model.User.id == int(request.form['driver']))
-            
+
         
+        for i, d in enumerate(dow):
+            if d not in request.form:
+                query = query.filter(sqlalchemy.func.dayofweek(model.DriverDailyRoute.date) != str(i))
+              
         header = ['Username', 'Last Name', 'First Name', 'Agency Name', 
                   'Agency Type', 'Address', 'City', 'State', 'Zip', 'Date', 'Time', 'Is Special Stop', 'Cargo Temperature',
                   'Prepared', 'Produce', 'Dairy', 'Raw Meat', 'Perishable', 'Dry Goods',
@@ -681,10 +688,11 @@ def admin_query_db():
         return Response(gen_csv(), mimetype='text/csv', headers={'Content-Disposition': 'filename="t2t_query.csv"'})
     
     
+    
     drivers = model.User.query.filter_by(acct_type=model.User.DRIVER).order_by(model.User.active, model.User.last_name, model.User.first_name, model.User.username).all()
     agencies = model.Agency.query.order_by(model.Agency.active, model.Agency.name).all()
     
-    return render_template('admin/dbquery.html', page_title='Database Query', drivers=drivers, agencies=agencies)
+    return render_template('admin/dbquery.html', page_title='Database Query', drivers=drivers, agencies=agencies, dow=dow)
 
 @app.route('/admin/backup')
 @admin_filter
