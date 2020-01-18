@@ -1,70 +1,86 @@
 {% extends 'driver/driver_base.html' %}
 {% macro perror(x, lim=5) %}
-	{% set err = (x[0] - x[1]) * 100.0 / x[0] if x[0] else 0 %}
-	{% if (err | abs) < lim %}
-		{{ err | round(1) }}%
-	{% else %}
-		<font color="red">{{ err | round(1) }}%</font>
-	{% endif %}
+{% set err = (x[0] - x[1]) * 100.0 / x[0] if x[0] else 0 %}
+{% if (err | abs) < lim %}
+{{ err | round(1) }}%
+{% else %}
+<font color="red">{{ err | round(1) }}%</font>
+{% endif %}
 {% endmacro %}
 {% block body %}
 <table style="border-collapse: collapse" border="1">
-	<tr>
-		<th>Agency</th>
-		<th>Stop Type</th>
-		<th>Stop Time</th>
-		<th>Cargo Temp</th>
-		<th>Prepared</th>
-		<th>Produce</th>
-		<th>Dairy</th>
-		<th>Raw Meat</th>
-		<th>Perishable</th>
-		<th>Dry Goods</th>
-		<th>Bread</th>
-		<th>TOTAL</th>
-	</tr>
-	{% for stop in route.stops %}
-		<tr style="background-color: {{'#FFDDDD' if stop.agency.agency_type == 'donor' else '#DDFFDD'}}">
-			<td><a href="{{ url_for('driver_stop', sid=stop.id) }}">{{ stop.agency.name }}</a></td>
-			<td>{{ 'PICK UP' if stop.agency.agency_type == 'donor' else 'DROP OFF' }}</td>
-			<td>{{ stop.time }}</td>
-			<td>{{ stop.cargo_temp | greyzero }}</td>
-			<td>{{ stop.prepared | greyzero }}</td>
-			<td>{{ stop.produce | greyzero }}</td>
-			<td>{{ stop.dairy | greyzero }}</td>
-			<td>{{ stop.raw_meat | greyzero }}</td>
-			<td>{{ stop.perishable | greyzero }}</td>
-			<td>{{ stop.dry_goods | greyzero }}</td>
-			<td>{{ stop.bread | greyzero }}</td>
-			<td>{{ stop.total_up() | greyzero }}</td>
-			{% if stop.special_stop %}
-				<td><a href="{{ url_for('driver_remove_special', sid=stop.id) }}" onclick="return confirm('Are you sure you want to delete?')">Delete</a></td>
-			{% endif %}
-		</tr>
-	{% endfor %}
+  <tr>
+    <th>Agency</th>
+    <th>Stop Type</th>
+    <th>Stop Time</th>
+    <th>Cargo Temp</th>
+    <th>Prepared</th>
+    <th>Produce</th>
+    <th>Dairy</th>
+    <th>Raw Meat</th>
+    <th>Perishable</th>
+    <th>Dry Goods</th>
+    <th>Bread</th>
+    <th>TOTAL</th>
+  </tr>
+  {% for stop in route.stops %}
+  <tr style="background-color: {{'#FFDDDD' if stop.agency.agency_type == 'donor' else '#DDFFDD'}}">
+    <td><a href="{{ url_for('driver_stop', sid=stop.id) }}">{{ stop.agency.name }}</a></td>
+    <td>{{ 'PICK UP' if stop.agency.agency_type == 'donor' else 'DROP OFF' }}</td>
+    <td>{{ stop.time }}</td>
+    <td>{{ stop.cargo_temp | greyzero }}</td>
+    <td>{{ stop.prepared | greyzero }}</td>
+    <td>{{ stop.produce | greyzero }}</td>
+    <td>{{ stop.dairy | greyzero }}</td>
+    <td>{{ stop.raw_meat | greyzero }}</td>
+    <td>{{ stop.perishable | greyzero }}</td>
+    <td>{{ stop.dry_goods | greyzero }}</td>
+    <td>{{ stop.bread | greyzero }}</td>
+    <td>{{ stop.total_up() | greyzero }}</td>
+    {% if stop.special_stop %}
+    <td><a href="{{ url_for('driver_remove_special', sid=stop.id) }}"
+        onclick="return confirm('Are you sure you want to delete?')">Delete</a></td>
+    {% endif %}
+  </tr>
+  {% endfor %}
 </table>
 {% from 'form_tools.html' import full_form %}
 {{ full_form([special_form.agency], method='post', action=url_for('driver_add_special'), submit_name='Add') }}
 <table cellpadding="10">
-	<h3>Totals</h3>
-	<tr>
-		<th>Category</th>
-		<th>Picked Up</th>
-		<th>Dropped Off</th>
-	</tr>
-	{% for t in totals %}
-		<tr>
-			<td>{{ t }}</td>
-			<td>{{ totals[t][0] | round(1) }}</td>
-			<td>{{ totals[t][1] | round(1) }}</td>
-			<td>{{ perror(totals[t]) }}</td>
-		</tr>
-	{% endfor %}
-	<tr>
-		<td>TOTAL</td>
-		<td>{{ total[0] }}</td>
-		<td>{{ total[1] }}</td>
-		<td>{{ perror(total) }}</td>
-	</tr>
+  <h3>Totals</h3>
+  <tr>
+    <th>Category</th>
+    <th>Picked Up</th>
+    <th>Dropped Off</th>
+  </tr>
+  {% for t in totals %}
+  <tr>
+    <td>{{ t }}</td>
+    <td>{{ totals[t][0] | round(1) }}</td>
+    <td>{{ totals[t][1] | round(1) }}</td>
+    <td>{{ perror(totals[t]) }}</td>
+  </tr>
+  {% endfor %}
+  <tr>
+    <td>TOTAL</td>
+    <td>{{ total[0] }}</td>
+    <td>{{ total[1] }}</td>
+    <td>{{ perror(total) }}</td>
+  </tr>
 </table>
+
+<td>
+  <form method="post">
+    <input type="hidden" name="did" , value="{{ d.id }}" />
+    <select name="sid" method="post">
+      <option value="None">---</option>
+      {% for s in schedules %}
+      <option value="{{ s.id }}" {{ 'selected' if s.driver_id == d.id }}>{{ s.name }}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Update Schedule" />
+  </form>
+</td>
+
+
 {% endblock %}

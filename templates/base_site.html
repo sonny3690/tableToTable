@@ -37,7 +37,8 @@
     <a href="{{ url_for('admin_lbs_per_agency') }}">Pounds Per Agency</a>&nbsp;|&nbsp;
     <a href="{{ url_for('admin_backup') }}">Download Database Backup</a>
     {% else %}
-    <a href="{{url_for('driver_route_today')}}">Today's Route</a>
+    <a href="{{url_for('driver_route_today')}}">Today's Route</a>&nbsp;|&nbsp;
+    <a href="{{url_for('driver_route_today')}}">Change Schedule</a>
     {% endif %}
   </p>
   <hr />

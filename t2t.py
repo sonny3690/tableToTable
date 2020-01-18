@@ -730,26 +730,50 @@ def driver_route_maker():
         model.db.session.rollback()
         log_except()
         
+
+    
     return redirect(url_for('driver_route_today'))
     
 
 @app.route('/driver/today')
 @driver_filter
 def driver_route_today():
-    today = datetime.date.today()
-    route = model.DriverDailyRoute.query.filter(model.DriverDailyRoute.driver_id == session['user_id'],
-                                  model.DriverDailyRoute.date == today).first()
-    if not route:
-        return render_template('driver/driver_load_route.html', page_title='Load Route')
     
-    total = route.totals()
-    totals = total[1]
-    total = total[0]
-    
-    ages = [('---', '---')] + [(a.id, a.name) for a in model.Agency.query.options(load_only('id', 'name')).order_by(func.lower(model.Agency.name)).all()] 
-    special_form = forms.AddSpecialPickup()
-    special_form.set_choices(ages)
-    return render_template('driver/driver_today.html', page_title='Today\'s Route', route=route, totals=totals, total=total, special_form=special_form)
+
+    if request.method == 'POST' and 'did' in request.form and 'sid' in request.form:
+        try:
+            did = int(request.form['did'])
+            d = model.User.query.get(did)
+            assert d and d.acct_type == model.User.DRIVER
+            for s in model.DriverSchedule.query.filter_by(driver_id = did).all():
+                s.driver_id = None
+            sid = request.form['sid']
+            if sid and sid != 'None':
+                model.DriverSchedule.query.get(int(sid)).driver_id = did
+            model.db.session.commit()
+            flash('Schedule Updated')
+            return redirect(request.url)
+        except:
+            model.db.session.rollback()
+            flash('Database Error! Can not update schedule.', 'error')
+            log_except()
+
+    else:
+        today = datetime.date.today()
+        route = model.DriverDailyRoute.query.filter(model.DriverDailyRoute.driver_id == session['user_id'],
+                                      model.DriverDailyRoute.date == today).first()
+        if not route:
+            return render_template('driver/driver_load_route.html', page_title='Load Route')
+        
+        total = route.totals()
+        totals = total[1]
+        total = total[0]
+        
+        ages = [('---', '---')] + [(a.id, a.name) for a in model.Agency.query.options(load_only('id', 'name')).order_by(func.lower(model.Agency.name)).all()] 
+        special_form = forms.AddSpecialPickup()
+        special_form.set_choices(ages)
+        d = model.User.query.get(session['user_id'])    
+    return render_template('driver/driver_today.html', page_title='Today\'s Route', route=route, totals=totals, total=total, special_form=special_form, d=d, schedules=model.DriverSchedule.query.all())
 
 @app.route('/driver/today/special', methods=['POST'])
 @driver_filter
