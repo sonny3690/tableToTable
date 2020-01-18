@@ -69,18 +69,4 @@
   </tr>
 </table>
 
-<td>
-  <form method="post">
-    <input type="hidden" name="did" , value="{{ d.id }}" />
-    <select name="sid" method="post">
-      <option value="None">---</option>
-      {% for s in schedules %}
-      <option value="{{ s.id }}" {{ 'selected' if s.driver_id == d.id }}>{{ s.name }}</option>
-      {% endfor %}
-    </select>
-    <input type="submit" value="Update Schedule" />
-  </form>
-</td>
-
-
 {% endblock %}
