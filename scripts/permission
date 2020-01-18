@@ -1,0 +1,4 @@
+#!/bin/sh
+
+chmod -R u+x ./scripts
+

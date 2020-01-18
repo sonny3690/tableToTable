@@ -3,22 +3,12 @@
 
 <head>
 
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css"
-    integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css"
+    integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="static/base.css">
-
 
   <title>Table To Table Reporting{{ ' - ' + page_title if page_title else ''}}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <style>
-    .center-text {
-      background-color: black;
-      color: white;
-      margin: 20px;
-      padding: 20px;
-    }
-  </style>
 
 </head>
 
@@ -32,11 +22,11 @@
     <a href="{{url_for('login')}}">Login</a>
     {% endif %}
   </div>
-  <div class="center-text">
+  <div class="text-center">
     <a href="{{ url_for('index') }}"><img src="/static/logo.png" alt="Table to Table" /></a>
-    <h2 class="">Route Accounting System</h2>
+    <h2 class="text-center">Route Accounting System</h2>
   </div>
-  <p>
+  <p class="text-center">
     {% if not 'user_type' in session %}
     {% elif session['user_type'] == 'admin' %}
     <a href="{{ url_for('admin_drivers') }}">Drivers</a>&nbsp;|&nbsp;
@@ -51,19 +41,22 @@
     {% endif %}
   </p>
   <hr />
-  {% if page_title %}<h2>{{ page_title }}</h2>{% endif %}
-  {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-  {% for category, message in messages %}
-  <em>
-    <div {{ 'style="color:red"' | safe if category == 'error' else '' }}>{{ message | linebreaks }}</div>
-  </em><br />
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
+  <div class="text-center">
+    {% if page_title %}<h2>{{ page_title }}</h2>{% endif %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+  
+    <em>
+      <div {{ 'style="color:red"' | safe if category == 'error' else '' }}>{{ message | linebreaks }}</div>
+    </em><br />
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 
-  {% block body%}
-  {% endblock %}
+    {% block body%}
+    {% endblock %}
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

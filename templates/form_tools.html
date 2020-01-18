@@ -17,10 +17,11 @@
 {% endmacro %}
 
 {% macro full_form(fields, has_errors=True, show_errors=True, top_errors=True, submit_name='Submit', in_table=False, other_errors=[], field_args={}) %}
-	<form {% for a in kwargs %}
+  <form class="col-md-12 form-inline text-center"
+  {% for a in kwargs %}
 		{{ a | safe }}="{{ kwargs[a] | safe }}" 
 	{% endfor %}>
-		{%if not in_table %}<table>{% endif %}
+		{%if not in_table %}<table class="text-center">{% endif %}
 			{% if show_errors and top_errors and has_errors %}<tr>
 				<td></td>
 				<td style="color:red"><dl>
