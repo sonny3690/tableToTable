@@ -17,12 +17,13 @@
 {% endmacro %}
 
 {% macro full_form(fields, has_errors=True, show_errors=True, top_errors=True, submit_name='Submit', in_table=False, other_errors=[], field_args={}) %}
-  <form class="col-md-12 form-inline text-center"
+  <form style="margin: 5vw 40vw; width: 20vw;"
   {% for a in kwargs %}
 		{{ a | safe }}="{{ kwargs[a] | safe }}" 
 	{% endfor %}>
 		{%if not in_table %}<table class="text-center">{% endif %}
-			{% if show_errors and top_errors and has_errors %}<tr>
+            {% if show_errors and top_errors and has_errors %}
+            <tr>
 				<td></td>
 				<td style="color:red"><dl>
 					{% for f in fields %}
@@ -45,7 +46,10 @@
 					<td>{{ f(**field_args.get(f, {})) | safe }}</td>
 				</tr>
 			{% endfor %}
-			<tr><td><input type="submit" value="{{ submit_name }}"</td><td></td></tr>
+			<tr> <td> </td>
+                
+                
+                <td><input type="submit" value="{{ submit_name }}"</td><td></td></tr>
 		{%if not in_table %}</table>{% endif %}
 	</form>
 {% endmacro %}

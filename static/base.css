@@ -11,4 +11,12 @@ body{
   justify-content: center;
 }
 
+.center-form {
+    margin: 0 auto;
+    width: 80%;
+    color: red;
+}
+
+
+
  
