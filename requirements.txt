@@ -24,3 +24,4 @@ ujson==1.35
 Werkzeug==0.16.0
 WTForms==2.2.1
 zipp==3.1.0
+mysqlclient==1.4.6
