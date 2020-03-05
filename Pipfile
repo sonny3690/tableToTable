@@ -9,6 +9,7 @@ verify_ssl = true
 cryptography = "*"
 sqlalchemy = "==1.2.18"
 python-language-server = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
