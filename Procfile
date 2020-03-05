@@ -1,1 +1,1 @@
-web: gunicorn t2t:app
+web: gunicorn t2t
