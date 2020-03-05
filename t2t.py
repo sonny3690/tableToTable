@@ -19,13 +19,11 @@ import subprocess
 import locale
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///t2t.db?check_same_thread=False'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/t2t'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/t2t'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/t2t' if 'HEROKU' not in os.environ else os.environ['DATABASE_URL']
 DB_PASSWORD = 'sNT0A=idLbgk2'
 DB_NAME = 't2t_routes'
 DB_USER = 't2t_routes'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://%s:%s@localhost/%s' % (DB_USER, DB_PASSWORD, DB_NAME)
 app.secret_key = '9003626490'
 
 model.db.init_app(app)
